@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^9.1.2",
+    "@wordpress/stylelint-config": "^19.1.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "eslint": "^7.32.0",
+    "prettier": "npm:wp-prettier@2.2.1-beta-1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
+  },
+  "stylelint": {
+    "extends": "@wordpress/stylelint-config"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@wordpress/eslint-plugin/recommended"
+    ]
+  },
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack --watch"
+  }
+}
