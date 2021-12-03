@@ -23,12 +23,20 @@ class Activator {
 	 */
 	public static function activate() {
 
-			$min_php = '5.6.0';
+		$min_php = '7.0.0';
 
 		// Check PHP Version and deactivate & die if it doesn't meet minimum requirements.
 		if ( version_compare( PHP_VERSION, $min_php, '<' ) ) {
 			deactivate_plugins( plugin_basename( __FILE__ ) );
-			wp_die( 'This plugin requires a minmum PHP Version of ' . $min_php );
+			wp_die(
+				esc_html__( 'This plugin requires a minmum PHP Version of ', 'dk-hidden-tags' ) .
+				esc_html( $min_php )
+			);
+		}
+
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+			wp_die( esc_html__( 'This plugin requires a WooCommerce plugin ', 'dk-hidden-tags' ) );
 		}
 
 	}

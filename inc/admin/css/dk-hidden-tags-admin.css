@@ -1,5 +1,8 @@
-/**
- * All of the CSS for your admin-specific functionality should be included in this file.
- *
- * The file is enqueued from inc/admin/class-admin.php.
- */
+#woocommerce-product-data ul.wc-tabs li.hidden-tags-tab_tab a::before {
+	font-family: WooCommerce;
+	content: "\e025";
+}
+
+.hidden-tags {
+	height: 100%;
+}

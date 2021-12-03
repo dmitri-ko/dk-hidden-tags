@@ -7,13 +7,11 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://example.com
  * @since             1.0.0
  * @package           DK_Hidden_Tags
  *
  * @wordpress-plugin
- * Plugin Name:       Woocommerce: Hidden search terms
- * Plugin URI:        https://github.com/dmitri-ko/dk-hidden-tags/
+ * Plugin Name:       Woocommerce Hidden Search Terms
  * Description:       Adds extra search terms to WooCommerce Products.
  * Version:           1.0.0
  * Author:            Dmitry Kokorin
@@ -118,7 +116,7 @@ function DK_Hidden_Tags_init() {
 		return DK_Hidden_Tags::init();
 }
 
-$min_php = '5.6.0';
+$min_php = '7.0.0';
 
 // Check the minimum required PHP version and run the plugin.
 if ( version_compare( PHP_VERSION, $min_php, '>=' ) ) {

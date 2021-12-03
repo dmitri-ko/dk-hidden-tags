@@ -2,60 +2,32 @@
 
 namespace DK_Hidden_Tags\Inc\Admin;
 
+use DK_Hidden_Tags\Inc\Common\Settings;
+use DK_Hidden_Tags\Inc\Common\Hidden_Tags_Tab;
+
 /**
  * The admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
- * @link       http://example.com
  * @since      1.0.0
  *
- * @author    Your Name or Your Company
+ * @author     Dmitry Kokorin
  */
 class Admin {
 
 	/**
-	 * The ID of this plugin.
+	 * Hidden tags tab for Product tabs
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @var Hidden_Tags_Tab
 	 */
-	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
-	 * The text domain of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_text_domain    The text domain of this plugin.
-	 */
-	private $plugin_text_domain;
+	private Hidden_Tags_Tab $tab;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since       1.0.0
-	 * @param       string $plugin_name        The name of this plugin.
-	 * @param       string $version            The version of this plugin.
-	 * @param       string $plugin_text_domain The text domain of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $plugin_text_domain ) {
-
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-		$this->plugin_text_domain = $plugin_text_domain;
-
+	public function __construct() {
+		$this->tab = new Hidden_Tags_Tab();
 	}
 
 	/**
@@ -65,19 +37,13 @@ class Admin {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/dk-hidden-tags-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style(
+			Settings::get_instance()->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/dk-hidden-tags-admin.css',
+			array(),
+			Settings::get_instance()->version,
+			'all'
+		);
 
 	}
 
@@ -87,20 +53,50 @@ class Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		/*
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/dk-hidden-tags-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script(
+			Settings::get_instance()->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/dk-hidden-tags-admin.js',
+			array( 'jquery' ),
+			Settings::get_instance()->version,
+			false
+		);
 
 	}
 
+	/**
+	 * Get hidden tags tab
+	 *
+	 * @return Hidden_Tags_Tab
+	 */
+	public function get_tabs() {
+		return $this->tab;
+	}
+
+	/**
+	 * Add data field for hidden tags
+	 */
+	public function add_hidden_tags_data_fields() {
+		$this->tab->add_hidden_tags_data_fields();
+	}
+
+	/**
+	 *  Save data for hidden tags field
+	 *
+	 * @param int $post_id the post_id.
+	 */
+	public function process_hidden_tags_meta_fields_save( $post_id ) {
+		$this->tab->process_hidden_tags_meta_fields_save( $post_id );
+	}
+
+	/**
+	 * Add new tab to product tabs
+	 *
+	 * @param array $product_data_tabs the tabs array.
+	 *
+	 * @return array
+	 */
+	public function add_hidden_tags_data_tab( $product_data_tabs ) {
+		return $this->tab->add_hidden_tags_data_tab( $product_data_tabs );
+	}
 }

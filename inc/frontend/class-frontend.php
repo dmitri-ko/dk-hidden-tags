@@ -2,61 +2,15 @@
 
 namespace DK_Hidden_Tags\Inc\Frontend;
 
+use DK_Hidden_Tags\Inc\Common\Settings;
+use WP_Query;
+
 /**
  * The public-facing functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the public-facing stylesheet and JavaScript.
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @author    Your Name or Your Company
+ * @author Dmitry Kokorin
  */
 class Frontend {
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
-	 * The text domain of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_text_domain    The text domain of this plugin.
-	 */
-	private $plugin_text_domain;
-
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since       1.0.0
-	 * @param       string $plugin_name        The name of this plugin.
-	 * @param       string $version            The version of this plugin.
-	 * @param       string $plugin_text_domain The text domain of this plugin.
-	 */
-	public function __construct( $plugin_name, $version, $plugin_text_domain ) {
-
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-		$this->plugin_text_domain = $plugin_text_domain;
-
-	}
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
@@ -65,19 +19,13 @@ class Frontend {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/dk-hidden-tags-frontend.css', array(), $this->version, 'all' );
+		wp_enqueue_style(
+			Settings::get_instance()->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/dk-hidden-tags-frontend.css',
+			array(),
+			Settings::get_instance()->version,
+			'all'
+		);
 
 	}
 
@@ -88,20 +36,50 @@ class Frontend {
 	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/dk-hidden-tags-frontend.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script(
+			Settings::get_instance()->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/dk-hidden-tags-frontend.js',
+			array( 'jquery' ),
+			Settings::get_instance()->version,
+			false
+		);
 
 	}
 
+	/**
+	 * Search term in hidden tags
+	 *
+	 * @param string $term the search term.
+	 *
+	 * @return WP_Query
+	 */
+	public function search_terms( string $term ) {
+		wp_reset_postdata();
+
+		return new WP_Query(
+			array(
+				'fields'           => 'ids',
+				'suppress_filters' => true,
+				'posts_per_page'   => - 1,
+				'meta_query'       => array(
+					array(
+						'key'     => Settings::get_instance()->meta_key,
+						'value'   => $term,
+						'compare' => 'LIKE',
+					),
+				),
+				'tax_query'        => array(
+					array(
+						'taxonomy' => 'product_cat',
+						'field'    => 'term_id',
+						'terms'    => array( 62 ),
+						'operator' => 'NOT IN',
+					),
+				),
+				'post_type'        => array( 'product' ),
+				'orderby'          => array( 'title' => 'ASC' ),
+				'limit'            => - 1,
+			)
+		);
+	}
 }
