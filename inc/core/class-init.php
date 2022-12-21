@@ -95,7 +95,7 @@ class Init {
 			Settings::get_instance()->plugin_name,
 			Settings::get_instance()->version,
 			Settings::get_instance()->plugin_basename,
-			'http://dmitriko.ru/wp/wp-content/uploads/updater/' . Settings::get_instance()->plugin_name . '/info.json'
+			'http://dmitriko.ru/wp-content/uploads/updater/' . Settings::get_instance()->plugin_name . '/info.json'
 		);
 		$this->loader->add_action( 'plugins_api', $plugin_updater, 'view_plugin_info', 20, 3 );
 		$this->loader->add_action( 'site_transient_update_plugins', $plugin_updater, 'push_update' );

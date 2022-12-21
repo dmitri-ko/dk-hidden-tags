@@ -59,7 +59,7 @@ class Frontend {
 		return new WP_Query(
 			array(
 				'fields'           => 'ids',
-				'suppress_filters' => true,
+				//'suppress_filters' => true,
 				'posts_per_page'   => - 1,
 				'meta_query'       => array(
 					array(
